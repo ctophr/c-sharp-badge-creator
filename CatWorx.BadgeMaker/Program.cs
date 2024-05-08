@@ -5,16 +5,7 @@ namespace Catworx.BadgeMaker
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            // Call GetEmployees method
-            List<string> employees = GetEmployees();
 
-            // Call PrintEmployees method
-            PrintEmployees(employees);
-
-
-        }
         static List<string> GetEmployees()
         {
             // Return a list of strings
@@ -45,6 +36,17 @@ namespace Catworx.BadgeMaker
             {
                 Console.WriteLine(employees[i]);
             }
+        }
+
+        static void Main(string[] args)
+        {
+            // Call GetEmployees method
+            List<string> employees = GetEmployees();
+
+            // Call PrintEmployees method
+            PrintEmployees(employees);
+
+
         }
     }
 }
