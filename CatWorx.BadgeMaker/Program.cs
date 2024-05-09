@@ -15,22 +15,33 @@ namespace Catworx.BadgeMaker
             // Collect user values until the value is an empty string
             while (true)
             {
-                Console.WriteLine("Please enter employee name, or enter blank to quit: ");
+                Console.WriteLine("Please enter employee first name, or enter blank to quit: ");
                 // Read a name from the console and assign it to a variable
                 // ?? is a coalescing operator that tells ReadLine how to handle a null input value,
                 // if null is found, it is replaced with ""
                 // necessary because our list can only have string values ... not nulls
                 // won't run without it apparently.
-                string input = Console.ReadLine() ?? "";
+                string inputFirstName = Console.ReadLine() ?? "";
 
                 // Break if user enters an empty string
-                if (input == "")
+                if (inputFirstName == "")
                 {
                     break;
                 }
 
+                Console.WriteLine("Enter employee last name:");
+                string inputLastName = Console.ReadLine() ?? "";
+
+                Console.WriteLine("Enter employee ID:");
+                int inputId = Int32.Parse(Console.ReadLine() ?? "");
+
+                Console.WriteLine("Enter employee photo url:");
+                string inputUrl = Console.ReadLine() ?? "";
+
+
+
                 // Create new Employee instance
-                Employee currentEmployee = new Employee(input, "Smith");
+                Employee currentEmployee = new Employee(inputFirstName, inputLastName, inputId, inputUrl);
 
                 employees.Add(currentEmployee);
             }
@@ -40,7 +51,7 @@ namespace Catworx.BadgeMaker
         {
             for (int i = 0; i < employees.Count; i++)
             {
-                Console.WriteLine(employees[i].GetFullName());
+                Console.WriteLine(employees[i].GetFullName() + employees[i].Id + employees[i].PhotoUrl);
             }
         }
 
