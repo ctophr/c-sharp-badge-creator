@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using CatWorx.BadgeMaker;
 
 namespace Catworx.BadgeMaker
 {
@@ -26,7 +28,11 @@ namespace Catworx.BadgeMaker
                 {
                     break;
                 }
-                employees.Add(input);
+
+                // Create new Employee instance
+                Employee currentEmployee = new Employee(input, "Smith");
+
+                employees.Add(currentEmployee.GetFullName());
             }
             return employees;
         }
