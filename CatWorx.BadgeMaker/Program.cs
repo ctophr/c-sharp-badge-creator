@@ -51,7 +51,7 @@ namespace Catworx.BadgeMaker
         {
             for (int i = 0; i < employees.Count; i++)
             {
-                Console.WriteLine(employees[i].GetFullName() + employees[i].Id + employees[i].PhotoUrl);
+                Console.WriteLine(employees[i].GetFullName() + employees[i].GetId() + employees[i].GetPhotoUrl());
             }
         }
 
