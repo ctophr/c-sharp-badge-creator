@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
 using CatWorx.BadgeMaker;
 
 namespace Catworx.BadgeMaker
@@ -8,7 +11,7 @@ namespace Catworx.BadgeMaker
     {
       // Return a list of Employee instances
       List<Employee> employees = new List<Employee>();
-      // Collect user values until the value is an empty string
+      // Collect user values until the firstname value is an empty string
       while (true)
       {
         Console.WriteLine("Please enter employee first name, or enter blank to quit: ");
@@ -36,7 +39,7 @@ namespace Catworx.BadgeMaker
 
 
 
-        // Create new Employee instance
+        // Create new Employee instance to put employee data
         Employee currentEmployee = new Employee(inputFirstName, inputLastName, inputId, inputUrl);
 
         employees.Add(currentEmployee);
@@ -49,6 +52,14 @@ namespace Catworx.BadgeMaker
       {
         string template = "{0,-10}\t{1,-20}\t{2}";
         Console.WriteLine(String.Format(template, employees[i].GetId(), employees[i].GetFullName(), employees[i].GetPhotoUrl()));
+      }
+    }
+    public static void MakeCSV(List<Employee> employees)
+    {
+      // If data directory does not exist, create it.
+      if (!Directory.Exists("data"))
+      {
+        Directory.CreateDirectory("data");
       }
     }
   }
