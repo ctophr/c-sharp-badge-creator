@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CatWorx.BadgeMaker;
+using System.Net.Http;
 using SkiaSharp;
 
 namespace Catworx.BadgeMaker
@@ -77,12 +79,47 @@ namespace Catworx.BadgeMaker
         }
       }
     }
-    public static void MakeBadges(List<Employee> employees)
+    async public static Task MakeBadges(List<Employee> employees)
     {
-      // Create image
-      SKImage newImage = SKImage.FromEncodedData(File.OpenRead("badge.png"));
-      SKData data = newImage.Encode();
-      data.SaveTo(File.OpenWrite("data/employeeBadge.png"));
+      // Bitmap layout variables reflecting badge template size
+      int BADGE_WIDTH = 669;
+      int BADGE_HEIGHT = 1044;
+
+      // Layout variables for sizing and placing the employee image
+      int PHOTO_LEFT_X = 184;
+      int PHOTO_TOP_Y = 215;
+      int PHOTO_RIGHT_X = 486;
+      int PHOTO_BOTTOM_Y = 517;
+
+      // instance of HttpClient is disposed after code block has run
+      using (HttpClient client = new HttpClient())
+      {
+        for (int i = 0; i < employees.Count; i++)
+        {
+          // Here we are using the GetPhotoURL() method on each Employee object in our List. 
+          // We are then using the GetStreamAsync() method with the await keyword to tell the method 
+          // to wait for this method to complete. We are then converting the Stream that is returned from 
+          // the GetStreamAsync() method into an SKImage using the FromEncodedData() method.
+          SKImage photo = SKImage.FromEncodedData(await client.GetStreamAsync(employees[i].GetPhotoUrl()));
+
+          SKImage background = SKImage.FromEncodedData(File.OpenRead("badge.png"));
+
+          SKBitmap badge = new SKBitmap(BADGE_WIDTH, BADGE_HEIGHT);
+          SKCanvas canvas = new SKCanvas(badge);
+
+          canvas.DrawImage(background, new SKRect(0, 0, BADGE_WIDTH, BADGE_HEIGHT));
+          canvas.DrawImage(photo, new SKRect(PHOTO_LEFT_X, PHOTO_TOP_Y, PHOTO_RIGHT_X, PHOTO_BOTTOM_Y));
+
+          SKImage finalImage = SKImage.FromBitmap(badge);
+          SKData data = finalImage.Encode();
+          string imagePath = "data/employeeBadge" + employees[i].GetId() + ".png";
+          data.SaveTo(File.OpenWrite(imagePath));
+
+          // SKData data = background.Encode();
+          // string imagePath = "data/employeeBadge" + employees[i].GetId() + ".png";
+          // data.SaveTo(File.OpenWrite(imagePath));
+        }
+      }
     }
   }
 }

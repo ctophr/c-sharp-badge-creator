@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using CatWorx.BadgeMaker;
 
 namespace Catworx.BadgeMaker
 {
     class Program
     {
-        static void Main(string[] args)
+        async static Task Main(string[] args)
         {
             // Call GetEmployees method to prompt user for employee info
             List<Employee> employees = Util.GetEmployees();
@@ -17,7 +18,7 @@ namespace Catworx.BadgeMaker
             Util.MakeCSV(employees);
 
             // Create badge png files
-            Util.MakeBadges(employees);
+            await Util.MakeBadges(employees);
 
 
         }
