@@ -9,12 +9,15 @@ namespace Catworx.BadgeMaker
     {
         static void Main(string[] args)
         {
-            // Call GetEmployees method
+            // Call GetEmployees method to prompt user for employee info
             List<Employee> employees = Util.GetEmployees();
 
-            // Call PrintEmployees method
+            // Print employees to console and also write to CSV file in /data
             Util.PrintEmployees(employees);
             Util.MakeCSV(employees);
+
+            // Create badge png files
+            Util.MakeBadges(employees);
 
 
         }
