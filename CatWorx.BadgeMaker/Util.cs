@@ -85,20 +85,38 @@ namespace Catworx.BadgeMaker
       int BADGE_WIDTH = 669;
       int BADGE_HEIGHT = 1044;
 
-      // Layout variables for sizing and placing the employee image
+      // Layout variables for sizing, styling and placing the employee info
       int PHOTO_LEFT_X = 184;
       int PHOTO_TOP_Y = 215;
       int PHOTO_RIGHT_X = 486;
       int PHOTO_BOTTOM_Y = 517;
+
+      int COMPANY_NAME_Y = 150;
+      float COMPANY_NAME_X = BADGE_WIDTH / 2;
+
+      SKPaint paint = new SKPaint
+      {
+        TextSize = 42.0f,
+        IsAntialias = true,
+        Color = SKColors.White,
+        IsStroke = false,
+        TextAlign = SKTextAlign.Center,
+        Typeface = SKTypeface.FromFamilyName("Arial")
+      };
+
+
+
+
 
       // instance of HttpClient is disposed after code block has run
       using (HttpClient client = new HttpClient())
       {
         for (int i = 0; i < employees.Count; i++)
         {
-          // Here we are using the GetPhotoURL() method on each Employee object in our List. 
-          // We are then using the GetStreamAsync() method with the await keyword to tell the method 
-          // to wait for this method to complete. We are then converting the Stream that is returned from 
+          // Use the GetPhotoURL() method on each Employee object in our List. 
+          // Then use the GetStreamAsync() method with the await keyword to tell the method 
+          // to wait for this method to complete. 
+          // Then convert the Stream that is returned from 
           // the GetStreamAsync() method into an SKImage using the FromEncodedData() method.
           SKImage photo = SKImage.FromEncodedData(await client.GetStreamAsync(employees[i].GetPhotoUrl()));
 
@@ -107,17 +125,19 @@ namespace Catworx.BadgeMaker
           SKBitmap badge = new SKBitmap(BADGE_WIDTH, BADGE_HEIGHT);
           SKCanvas canvas = new SKCanvas(badge);
 
+          // Draw badge template
           canvas.DrawImage(background, new SKRect(0, 0, BADGE_WIDTH, BADGE_HEIGHT));
+          // Draw employee photo
           canvas.DrawImage(photo, new SKRect(PHOTO_LEFT_X, PHOTO_TOP_Y, PHOTO_RIGHT_X, PHOTO_BOTTOM_Y));
+          // Draw company name at top
+          canvas.DrawText(employees[i].GetCompanyName(), COMPANY_NAME_X, COMPANY_NAME_Y, paint);
 
+
+          // Save completed badge to employeeBadge[ID].png
           SKImage finalImage = SKImage.FromBitmap(badge);
           SKData data = finalImage.Encode();
           string imagePath = "data/employeeBadge" + employees[i].GetId() + ".png";
           data.SaveTo(File.OpenWrite(imagePath));
-
-          // SKData data = background.Encode();
-          // string imagePath = "data/employeeBadge" + employees[i].GetId() + ".png";
-          // data.SaveTo(File.OpenWrite(imagePath));
         }
       }
     }
