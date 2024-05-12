@@ -162,8 +162,8 @@ namespace Catworx.BadgeMaker
           // Save completed badge to employeeBadge[ID].png
           SKImage finalImage = SKImage.FromBitmap(badge);
           SKData data = finalImage.Encode();
-          string imagePath = "data/employeeBadge" + employees[i].GetId() + ".png";
-          data.SaveTo(File.OpenWrite(imagePath));
+          string imagePathTemplate = "data/{0}_badge.png";
+          data.SaveTo(File.OpenWrite(string.Format(imagePathTemplate, employees[i].GetId())));
         }
       }
     }
