@@ -92,13 +92,24 @@ namespace Catworx.BadgeMaker
       int PHOTO_BOTTOM_Y = 517;
 
       int COMPANY_NAME_Y = 150;
-      float COMPANY_NAME_X = BADGE_WIDTH / 2;
+      int EMPLOYEE_NAME_Y = 600;
+      float CENTERED_X = BADGE_WIDTH / 2;
 
-      SKPaint paint = new SKPaint
+      SKPaint companyNamePaint = new SKPaint
       {
         TextSize = 42.0f,
         IsAntialias = true,
         Color = SKColors.White,
+        IsStroke = false,
+        TextAlign = SKTextAlign.Center,
+        Typeface = SKTypeface.FromFamilyName("Arial")
+      };
+
+      SKPaint employeeNamePaint = new SKPaint
+      {
+        TextSize = 42.0f,
+        IsAntialias = true,
+        Color = SKColors.Black,
         IsStroke = false,
         TextAlign = SKTextAlign.Center,
         Typeface = SKTypeface.FromFamilyName("Arial")
@@ -130,7 +141,9 @@ namespace Catworx.BadgeMaker
           // Draw employee photo
           canvas.DrawImage(photo, new SKRect(PHOTO_LEFT_X, PHOTO_TOP_Y, PHOTO_RIGHT_X, PHOTO_BOTTOM_Y));
           // Draw company name at top
-          canvas.DrawText(employees[i].GetCompanyName(), COMPANY_NAME_X, COMPANY_NAME_Y, paint);
+          canvas.DrawText(employees[i].GetCompanyName(), CENTERED_X, COMPANY_NAME_Y, companyNamePaint);
+          // Draw employee name
+          canvas.DrawText(employees[i].GetFullName(), CENTERED_X, EMPLOYEE_NAME_Y, employeeNamePaint);
 
 
           // Save completed badge to employeeBadge[ID].png
