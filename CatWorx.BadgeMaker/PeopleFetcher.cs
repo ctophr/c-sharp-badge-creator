@@ -56,25 +56,42 @@ namespace CatWorx.BadgeMaker
         string response = await client.GetStringAsync("https://randomuser.me/api/?results=10&nat=us&inc=name,id,picture");
         JObject json = JObject.Parse(response);
         // Console.WriteLine(json.SelectToken("results").Count());
-        for (int i = 0; i < json.SelectToken("results")!.Count(); i++)
+
+        // Update iteration method with foreach
+
+        foreach (JToken token in json.SelectToken("results")!)
         {
-          string firstNamePath = "results[{0}].name.first";
-          string firstName = json.SelectToken(string.Format(firstNamePath, i))!.ToString();
-
-          string lastNamePath = "results[{0}].name.last";
-          string lastName = json.SelectToken(string.Format(lastNamePath, i))!.ToString();
-
-          string idPath = "results[{0}].id.value";
-          string idString = json.SelectToken(string.Format(idPath, i))!.ToString();
-          int id = Convert.ToInt32(idString.Replace("-", ""));
-
-          string photoPath = "results[{0}].picture.large";
-          string photoUrl = json.SelectToken(string.Format(photoPath, i))!.ToString();
-
-          Employee currentEmployee = new Employee(firstName, lastName, id, photoUrl);
+          Employee currentEmployee = new Employee(
+            token.SelectToken("name.first")!.ToString(),
+            token.SelectToken("name.last")!.ToString(),
+            Convert.ToInt32(token.SelectToken("id.value")!.ToString().Replace("-", "")),
+            token.SelectToken("picture.large")!.ToString()
+          );
 
           employees.Add(currentEmployee);
         }
+
+        // Original iteration method with normal for loop
+
+        // for (int i = 0; i < json.SelectToken("results")!.Count(); i++)
+        // {
+        //   string firstNamePath = "results[{0}].name.first";
+        //   string firstName = json.SelectToken(string.Format(firstNamePath, i))!.ToString();
+
+        //   string lastNamePath = "results[{0}].name.last";
+        //   string lastName = json.SelectToken(string.Format(lastNamePath, i))!.ToString();
+
+        //   string idPath = "results[{0}].id.value";
+        //   string idString = json.SelectToken(string.Format(idPath, i))!.ToString();
+        //   int id = Convert.ToInt32(idString.Replace("-", ""));
+
+        //   string photoPath = "results[{0}].picture.large";
+        //   string photoUrl = json.SelectToken(string.Format(photoPath, i))!.ToString();
+
+        //   Employee currentEmployee = new Employee(firstName, lastName, id, photoUrl);
+
+        //   employees.Add(currentEmployee);
+        // }
 
       }
       return employees;
