@@ -13,6 +13,7 @@ namespace CatWorx.BadgeMaker
     {
       // Return a list of Employee instances
       List<Employee> employees = new List<Employee>();
+
       // Collect user values until the firstname value is an empty string
       while (true)
       {

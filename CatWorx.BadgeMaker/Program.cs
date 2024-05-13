@@ -11,9 +11,10 @@ namespace Catworx.BadgeMaker
         async static Task Main(string[] args)
         {
             // Call GetEmployees method to prompt user for employee info
+            List<Employee> employees = await Util.Initialize();
             // List<Employee> employees = PeopleFetcher.GetEmployees();
 
-            List<Employee> employees = await PeopleFetcher.GetFromApi();
+            // List<Employee> employees = await PeopleFetcher.GetFromApi();
 
             // Print employees to console and also write to CSV file in /data
             Util.PrintEmployees(employees);

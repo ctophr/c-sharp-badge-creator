@@ -10,6 +10,27 @@ namespace Catworx.BadgeMaker
 {
   class Util
   {
+
+    async public static Task<List<Employee>> Initialize()
+    {
+      Console.WriteLine("Type 'Y' to fetch employees from API, or hit Enter to input manually");
+      string inputInitialize = Console.ReadLine() ?? "";
+
+      if (inputInitialize == "Y" || inputInitialize == "y")
+      {
+        List<Employee> employees = await PeopleFetcher.GetFromApi();
+        return employees;
+      }
+      else
+      {
+        List<Employee> employees = PeopleFetcher.GetEmployees();
+        return employees;
+      }
+
+
+
+
+    }
     public static void PrintEmployees(List<Employee> employees)
     {
       for (int i = 0; i < employees.Count; i++)
