@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
 
 namespace CatWorx.BadgeMaker
 {
@@ -41,6 +45,37 @@ namespace CatWorx.BadgeMaker
         Employee currentEmployee = new Employee(inputFirstName, inputLastName, inputId, inputUrl);
 
         employees.Add(currentEmployee);
+      }
+      return employees;
+    }
+    async public static Task<List<Employee>> GetFromApi()
+    {
+      List<Employee> employees = new List<Employee>();
+      using (HttpClient client = new HttpClient())
+      {
+        string response = await client.GetStringAsync("https://randomuser.me/api/?results=10&nat=us&inc=name,id,picture");
+        JObject json = JObject.Parse(response);
+        // Console.WriteLine(json.SelectToken("results").Count());
+        for (int i = 0; i < json.SelectToken("results")!.Count(); i++)
+        {
+          string firstNamePath = "results[{0}].name.first";
+          string firstName = json.SelectToken(string.Format(firstNamePath, i))!.ToString();
+
+          string lastNamePath = "results[{0}].name.last";
+          string lastName = json.SelectToken(string.Format(lastNamePath, i))!.ToString();
+
+          string idPath = "results[{0}].id.value";
+          string idString = json.SelectToken(string.Format(idPath, i))!.ToString();
+          int id = Convert.ToInt32(idString.Replace("-", ""));
+
+          string photoPath = "results[{0}].picture.large";
+          string photoUrl = json.SelectToken(string.Format(photoPath, i))!.ToString();
+
+          Employee currentEmployee = new Employee(firstName, lastName, id, photoUrl);
+
+          employees.Add(currentEmployee);
+        }
+
       }
       return employees;
     }
